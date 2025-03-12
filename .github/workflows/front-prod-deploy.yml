@@ -28,19 +28,19 @@ jobs:
       - name: Build Vue app
         run: yarn run build
 
-      - name: 'Prepare SSH key'
-        run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/front_key.pem
-          chmod 600 ~/.ssh/front_key.pem
-          echo "IdentityFile ~/.ssh/front_key.pem" >> ~/.ssh/config
-
-      - name: Deploy to server
-        run: |
-          rsync -avz --delete -e "ssh -i ~/.ssh/front_key.pem -o StrictHostKeyChecking=no" .output/ github-front@srv-compendium.proximaresearch.info:/srv/www/redesign.compendium.com.ua/.output/
-          ssh -o "StrictHostKeyChecking no" github-front@srv-compendium.proximaresearch.info "rsync -avz /srv/www/redesign.compendium.com.ua/public/ /srv/www/redesign.compendium.com.ua/.output/public/ && sudo su - pm20 -c bash -c 'source /home/pm20/.nvm/nvm.sh && pm2 restart /srv/www/redesign.compendium.com.ua/ecosystem.config.js'"
-
-      - name: 'Clean Up'
-        run: |
-          rm ~/.ssh/front_key.pem
-          sed -i '/front_key.pem/d' ~/.ssh/config
-          echo '' > ~/.ssh/known_hosts
+#      - name: 'Prepare SSH key'
+#        run: |
+#          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/front_key.pem
+#          chmod 600 ~/.ssh/front_key.pem
+#          echo "IdentityFile ~/.ssh/front_key.pem" >> ~/.ssh/config
+#
+#      - name: Deploy to server
+#        run: |
+#          rsync -avz --delete -e "ssh -i ~/.ssh/front_key.pem -o StrictHostKeyChecking=no" .output/ github-front@srv-compendium.proximaresearch.info:/srv/www/redesign.compendium.com.ua/.output/
+#          ssh -o "StrictHostKeyChecking no" github-front@srv-compendium.proximaresearch.info "rsync -avz /srv/www/redesign.compendium.com.ua/public/ /srv/www/redesign.compendium.com.ua/.output/public/ && sudo su - pm20 -c bash -c 'source /home/pm20/.nvm/nvm.sh && pm2 restart /srv/www/redesign.compendium.com.ua/ecosystem.config.js'"
+#
+#      - name: 'Clean Up'
+#        run: |
+#          rm ~/.ssh/front_key.pem
+#          sed -i '/front_key.pem/d' ~/.ssh/config
+#          echo '' > ~/.ssh/known_hosts
